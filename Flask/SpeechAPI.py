@@ -96,6 +96,7 @@ def callback(recognizer, audio):
         # instead of `r.recognize_google(audio)
         print("Enter callback")
         text = recognizer.recognize_google(audio)
+        #text = recognizer.recognize_sphinx(audio)
         print("Text: " + text)
         print("Google Speech Recognition thinks you said " + text)
         engine = pyttsx3.init()
@@ -111,16 +112,17 @@ def index():
     #audio_int()
     r = sr.Recognizer()
     m = sr.Microphone()
-    r.energy_threshold = 600
-    #with m as source:
-        #r.adjust_for_ambient_noise(source)  # we only need to calibrate once, before we start listening
+    #r.energy_threshold = 300
+    with m as source:
+        r.adjust_for_ambient_noise(source, duration=5)  # we only need to calibrate once, before we start listening
     
     # start listening in the background (note that we don't have to do this inside a `with` statement)
+    
     stop_listening = r.listen_in_background(m, callback)
     # `stop_listening` is now a function that, when called, stops background listening
     
     # do some unrelated computations for 5 seconds
-    for _ in range(50): time.sleep(0.1)  # we're still listening even though the main thread is doing other things
+    #for _ in range(50): time.sleep(0.1)  # we're still listening even though the main thread is doing other things
     
     # calling this function requests that the background listener stop listening
     #stop_listening(wait_for_stop=False)
