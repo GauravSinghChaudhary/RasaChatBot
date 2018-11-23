@@ -102,12 +102,17 @@ def sendRequest(message):
     
 def speakResponse(engine, val):
     engine.say(val)
-    engine.setProperty('rate', 130)
     engine.runAndWait()
     
 def processResponse(response):
     
+    # Initializing voice synthesizer
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[2].id)
+    engine.setProperty('rate', 130)
+    
+    # Processing array response
     data_arr = json.load(response)
     isEnterEmail = False
     buttonArr = []
