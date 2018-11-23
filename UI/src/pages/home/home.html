@@ -5,5 +5,21 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button (click)="initiateSpeech()">Click</button>
+  <ion-card>
+
+
+    <ion-card-content *ngIf="!bdisplay">
+      <div id = 'icon-div' class="center">
+        <ion-icon name="logo-android" center id = "ccare" class="image-responsive"></ion-icon>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <button ion-button (click)="initiateSpeech()" large  block ion-end *ngIf="!bdisplay">
+    Call
+    <ion-icon name="call" id="call-icon"></ion-icon>
+  </button>
+  <div *ngIf="bdisplay" >
+    Calling....
+
+  </div>
 </ion-content>
