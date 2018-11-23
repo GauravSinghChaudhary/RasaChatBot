@@ -13,6 +13,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 import speech_recognition as rs
 import pyttsx3
+import json
+import requests
 
 import pyaudio
 import audioop
@@ -22,6 +24,8 @@ import threading
 import time
 
 import speech_recognition as sr
+
+RASA_URL = "http://127.0.0.1:5005/webhooks/rest/webhook"
 
 # Microphone stream config.
 CHUNK = 1024  # CHUNKS of bytes to read each time from mic
@@ -86,6 +90,46 @@ def process(text):
     engine = pyttsx3.init()
     engine.say('Good morning.')
     engine.runAndWait()
+    
+def sendRequest(message):
+    # sending post request and saving response as response object
+    reqObj = {}
+    reqObj['sender'] = "U123"
+    reqObj['message'] = message
+    return requests.post(url = RASA_URL, data = reqObj) 
+    
+def speakResponse(engine, val):
+    engine.say(val)
+    engine.setProperty('rate', 130)
+    engine.runAndWait()
+    
+def processResponse(response):
+    
+    engine = pyttsx3.init()
+    data_arr = json.load(response)
+    isEnterEmail = False
+    buttonArr = []
+    for data in data_arr:
+        for key in data:
+            if key == 'text':
+                val = data[key]
+                if val.lower() == 'enter email to send details!':
+                    isEnterEmail = True
+                else:
+                    speakResponse(engine, val)
+            elif key == 'button':
+                buttonArr = data[key]
+    
+    if isEnterEmail:
+        val = 'Would you like to receive list of top restaurants to your registered email id?'
+        speakResponse(engine, val)
+    elif buttonArr:
+        for button in buttonArr:
+            for key in button:
+                if key == 'payload':
+                    val = button[key]
+                    speakResponse(engine, val)
+    
 
 # this is called from the background thread
 def callback(recognizer, audio):
@@ -99,9 +143,13 @@ def callback(recognizer, audio):
         #text = recognizer.recognize_sphinx(audio)
         print("Text: " + text)
         print("Google Speech Recognition thinks you said " + text)
-        engine = pyttsx3.init()
-        engine.say(text)
-        engine.runAndWait()
+        
+        # sending request to RASA bot
+        response = sendRequest(text)
+        
+        # process response
+        processResponse(response)
+        
     except sr.UnknownValueError:
         print("Google Speech Recognition could not understand audio")
     except sr.RequestError as e:
@@ -129,6 +177,7 @@ def index():
     
     # do some more unrelated things
     #while True: time.sleep(0.1)
+    return "success"
 
 if __name__ == "__main__":
     app.run(debug=True)
