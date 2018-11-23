@@ -8,14 +8,27 @@ import { RestProvider } from '../../providers/rest/rest';
   templateUrl: 'home.html'
 })
 export class HomePage {
-
+  message:string;
+  bdisplay:boolean = true;
+  connect:boolean = false;
   constructor(public navCtrl: NavController, public http: HttpClient, public restProvider: RestProvider) {
 
   }
   initiateSpeech() {
+    var _this = this;
     console.log("API hit");
+    this.message= "Connecting ....";
+    this.bdisplay = false;
+    this.connect = true;
     this.restProvider.requestData();
       console.log("API called");
-
+    setTimeout(function(){ _this.message = "Connected";
+    _this.connect = false}, 5000);
+  }
+  cancel(){
+  console.log("cancelled");
+    this.message= "";
+    this.bdisplay = true;
+    this.connect = false;
   }
 }

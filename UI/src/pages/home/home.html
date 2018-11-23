@@ -1,27 +1,41 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>Virtual Human Agent</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding >
   <div class="container">
   <ion-card>
+    <ion-card-content *ngIf="bdisplay">
 
-
-    <ion-card-content *ngIf="!bdisplay">
-      <div id = 'icon-div' class="center">
-        <ion-icon name="logo-android" center id = "ccare" class="image-responsive"></ion-icon>
+      <div class = 'icon-div'>
+        <ion-icon name="logo-android" center class = "ccare"></ion-icon>
       </div>
+
     </ion-card-content>
   </ion-card>
-  <button ion-button (click)="initiateSpeech()" large  block ion-end *ngIf="!bdisplay">
+  <button ion-button (click)="initiateSpeech()" large  block ion-end *ngIf="bdisplay">
     Call
     <ion-icon name="call" id="call-icon"></ion-icon>
   </button>
-  <div *ngIf="bdisplay" >
-    Calling....
+  <div *ngIf="!bdisplay" >
+    <ion-card>
+    <ion-card-content>
+      <div class = "ccare1" *ngIf="connect">
+      Connecting
+        <ion-spinner name = "bubbles"></ion-spinner>
+      </div>
 
+      <div class = "ccare1" *ngIf="!connect">
+        Connected!!!
+      </div>
+    </ion-card-content>
+    </ion-card>
+    <button ion-button (click)="cancel()" large block >
+      Cancel
+    </button>
   </div>
+
   </div>
 </ion-content>
