@@ -96,7 +96,9 @@ def sendRequest(message):
     reqObj = {}
     reqObj['sender'] = "U123"
     reqObj['message'] = message
-    return requests.post(url = RASA_URL, data = reqObj) 
+    r = requests.post(url = RASA_URL, data = reqObj)
+    print("Response text: " + r.text)
+    return r.text
     
 def speakResponse(engine, val):
     engine.say(val)
@@ -116,8 +118,9 @@ def processResponse(response):
                 if val.lower() == 'enter email to send details!':
                     isEnterEmail = True
                 else:
+                    print("Text speech: " + val)
                     speakResponse(engine, val)
-            elif key == 'button':
+            elif key == 'buttons':
                 buttonArr = data[key]
     
     if isEnterEmail:
@@ -128,6 +131,7 @@ def processResponse(response):
             for key in button:
                 if key == 'payload':
                     val = button[key]
+                    print("Payload speech: " + val)
                     speakResponse(engine, val)
     
 
