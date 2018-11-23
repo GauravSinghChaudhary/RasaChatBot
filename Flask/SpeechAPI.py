@@ -93,8 +93,10 @@ def callback(recognizer, audio):
     try:
         # for testing purposes, we're just using the default API key
         # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        # instead of `r.recognize_google(audio)`
+        # instead of `r.recognize_google(audio)
+        print("Enter callback")
         text = recognizer.recognize_google(audio)
+        print("Text: " + text)
         print("Google Speech Recognition thinks you said " + text)
         engine = pyttsx3.init()
         engine.say(text)
@@ -109,9 +111,9 @@ def index():
     #audio_int()
     r = sr.Recognizer()
     m = sr.Microphone()
-    #r.energy_threshold = 500
-    with m as source:
-        r.adjust_for_ambient_noise(source)  # we only need to calibrate once, before we start listening
+    r.energy_threshold = 600
+    #with m as source:
+        #r.adjust_for_ambient_noise(source)  # we only need to calibrate once, before we start listening
     
     # start listening in the background (note that we don't have to do this inside a `with` statement)
     stop_listening = r.listen_in_background(m, callback)
