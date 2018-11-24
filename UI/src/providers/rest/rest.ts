@@ -10,16 +10,31 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class RestProvider {
   apiUrl:string = "http://localhost:5000/";
+  cancelUrl:string = "http://localhost:5000/cancel";
   constructor(public http: HttpClient) {
     console.log('Hello RestProvider Provider');
   }
   requestData() {
 
-        this.http.get(this.apiUrl).subscribe(() => {
-                                          console.log("rest");
-                                        }, err => {
-                                          console.log(err);
-                                        });
+        return new Promise(resolve => {
+              this.http.get(this.apiUrl).subscribe(data => {
+                resolve(data);
+              }, err => {
+                console.log(err);
+              });
 
+      });
     }
+
+    cancelRequest() {
+
+            return new Promise(resolve => {
+                  this.http.get(this.cancelUrl).subscribe(data => {
+                    resolve(data);
+                  }, err => {
+                    console.log(err);
+                  });
+
+          });
+        }
 }
