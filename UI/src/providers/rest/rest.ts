@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class RestProvider {
   apiUrl:string = "http://localhost:5000/";
-  cancelUrl:string = "http://localhost:5000/cancel";
+  cancelUrl:string = "http://localhost:5000?stop=yes";
   constructor(public http: HttpClient) {
     console.log('Hello RestProvider Provider');
   }

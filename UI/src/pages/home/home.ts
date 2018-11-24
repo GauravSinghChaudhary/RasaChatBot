@@ -39,7 +39,7 @@ export class HomePage {
                                                              _this.message = "Connected";
                                                              _this.connect = false;
                                                              resolve();
-                                                         }, 5000)
+                                                         }, 10000)
                                                      });
                                                  })
                                                  .then(() => {
